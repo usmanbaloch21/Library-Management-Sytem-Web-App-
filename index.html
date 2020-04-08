@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> 
+    <link rel="stylesheet" type="text/css" href="style/main.css"> 
+</head>
+<body> <!-- Code for NavBar -->
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light">
+            <a href="index.html" class="navbar-brand">University Of Pontybridge Library</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="users.html" class="nav-link">Users</a></li>
+                    <li class="nav-item"><a href="books.html" class="nav-link">Books</a></li>
+                    <li class="nav-item"><a href="loan_book.html" class="nav-link">Loans</a></li>
+                    <li class="nav-item"><a href="Book_review.html" class="nav-link">Community</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <section> <!-- Section with 4 Buttions and images for different Sections -->
+        <div class="container">
+            <div class="row my-row">
+                <!-- Picture Reference 
+                Title = Group of Members Users
+                Image Link = https://www.goodfreephotos.com/public-domain-images/group-of-members-users-icon.png.php
+                -->
+                <div class="col-md-3">
+                    <a href="users.html"><img class="img-fluid" src="images/group-of-members-users-icon_800.png" alt="Users_logo" /></a>
+                    <h1><a href="users.html"> Users </a></h1>
+                    <p>Search/Add/Edit/Delete Users</p>
+                </div>     
+                <!-- Picture Reference 
+                Title = Technological Book You should Read
+                Image Link = https://towardsdatascience.com/technological-books-you-should-read-in-2020-82ba23dda054-->                   
+                <div class="col-md-3">
+                    <a href="books.html"><img class="img-fluid" src="images/1YAaAjBYEDVI7ynN588t8fg.jpeg" alt="Books_logo" /></a>
+                    <h1><a href="books.html">Books </a></h1>
+                    <p>Search/Add/Delete Books</p>
+                </div>
+                <!-- Picture Reference
+                Title = Making ends Meet textbook Edition
+                Image Link = https://www.thecrcconnection.com/features-arts-entertainment/2014/01/31/making-ends-meet-textbook-edition/    
+                -->
+                <div class="col-md-3">
+                    <a href="loan_book.html"><img class="img-fluid" src="images/textbook-tips.jpg" alt="loans_logo" /></a>
+                    <h1><a href="loan_book.html">Loans </a></h1>
+                    <p>Loan Books and Get Details On Loans </p>
+                </div>
+                <!-- Picture Reference 
+                Title = Somerset Diverse Communities 
+                Image Link = tps://somersetrcc.org.uk/somerset-diverse-communities-report-video-files/-->
+                <div class="col-md-3 row " >
+                    <a href="Book_review.html"><img class="img-fluid" src="images/crowd-2045499-e1504183779577.jpg" alt="Community_logo" /></a>
+                    <h1><a href="Book_review.html">Community </a></h1>
+                    <p>Add/Delete Book Reviews for others to Read and Give Us Some Feedback </p>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    <footer> <!-- Footer With Details-->
+        <div class="jumbotron text-center my-footer" style="margin-bottom:0">
+            <h5>University of Pontybridge</h5>
+            <p>Library Services</p>
+            <p>For IT sevices contact email= itsevices@pontybridge.edu</p>  
+        </div>          
+    </footer>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js"> </script>
+</body>
+</html>

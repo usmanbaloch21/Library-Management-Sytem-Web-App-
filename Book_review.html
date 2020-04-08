@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body>
+    <header> <!-- Nav Bar -->
+        <nav class="navbar navbar-expand-sm navbar-light">
+            <a href="index.html" class="navbar-brand">University Of Pontybridge Library</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="users.html" class="nav-link">Users</a></li>
+                    <li class="nav-item"><a href="books.html" class="nav-link">Books</a></li>
+                    <li class="nav-item"><a href="loan_book.html" class="nav-link">Loans</a></li>
+                    <li class="nav-item"><a href="Book_review.html" class="nav-link">Community</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <div class="text-center top">
+            <h2>Review Books You Have Read</h2>
+        </div>
+        </section> <!-- Side Nav Bar -->
+        <section class="my-row-user">
+            <div class="container-fluid text-center my-row-user">    
+                <div class="row content">
+                    <div class="col-sm-4 sidenav">
+                        <h3><a href="delete_review.html">Delete Review</a></h3>
+                        <h3><a href="feedback.html">Give Feedback</a></h3>
+                        <h3><a href="delete_feedback.html">Delete a Feedback</a></h3>
+                    </div>
+                <div id="input">
+                    <form> <!-- Forms Input-->
+                        <div>                      
+                        <label>Enter Book Title: </label>
+                        <label for="input_title"> <input type="text" id="input_title" class="form-control" placeholder="Book Title" /> </label>
+                        <div class="form-group">
+                            <label for="review">Review:</label>
+                            <textarea class="form-control" rows="5" id="review"></textarea>
+                          </div> 
+                        <div>                      
+                        <input type="button" id="add_btn" class="btn btn-primary" value="Add Review" /> 
+                        </div>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            <div>
+                <div class="text-center" id="users_list">
+
+                </div>
+            </div>
+        </section>
+    <footer> <!-- Footer -->
+        <div class="jumbotron text-center my-footer" style="margin-bottom:0">
+            <h5>University of Pontybridge</h5>
+            <p>Library Services</p>
+            <p>For IT sevices contact email= itsevices@pontybridge.edu</p>  
+        </div>          
+    </footer>
+    <script>
+        // the URI for our local node Library Server
+const base_url = "http://127.0.0.1:3000";
+
+// a function that gets the list of reviews and adds them to the list
+function review() {
+
+    // setting up an http GET request to the reviews endpoint 
+    var xhttp = new XMLHttpRequest();
+    var users_url = "/reviews";
+
+    var query_url = base_url + users_url;
+    xhttp.open('GET', query_url);
+
+    // when the request is finished, go through the return data
+    // and add each reviews to the list
+    xhttp.addEventListener('load', function(){
+
+        var user_list= document.querySelector('#users_list');
+        // clear the list of existing data
+        user_list.innerHTML = "";
+
+        var users = JSON.parse(this.response);
+        // loop through all reviews
+        users.forEach(function(user){
+            // create a new list item for each one and add to the list
+            var message = document.createTextNode("Review for Book " + user.title)
+            var title = document.createTextNode("Title: "+ user.title);
+            var comment = document.createTextNode("Review: " +user.comment);
+            var id = document.createTextNode("ID: "+ user.id);
+            var list_item0 = document.createElement('h5'); 
+            var list_item1 = document.createElement('li');
+            var list_item2 = document.createElement('li');
+            var list_item4 = document.createElement('li');
+            list_item0.appendChild(message);
+            list_item4.appendChild(id);
+            list_item1.appendChild(title);
+            list_item2.appendChild(comment);
+            user_list.appendChild(list_item0);
+            user_list.appendChild(list_item4);
+            user_list.appendChild(list_item1);
+            user_list.appendChild(list_item2);
+            
+        })
+        console.log(users)
+    });
+    xhttp.send();
+}
+
+
+// when the user clicks the button, make a POST req to add review
+document.querySelector('#add_btn').addEventListener('click', function(){
+     
+    var addfeed = base_url + "/" + "reviews"
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.open("POST", addfeed);
+    // appropriate content type header for json 
+    xhttp.setRequestHeader('Content-Type', 'application/json')
+    //local constants created with the user input from forms 
+    const title = document.querySelector("#input_title").value
+    const comment = document.querySelector("#review").value;
+
+    var params = {
+        title: title,
+        comment: comment,
+    };
+
+    // when the POST request is finished, clear and add reviews list
+    xhttp.addEventListener('load', function(){
+        review();
+    });
+    
+    xhttp.send(JSON.stringify(params));
+
+});
+
+review();
+    </script> 
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js"> </script> 
+</body>
+</html>

@@ -1,0 +1,108 @@
+/*For Css mostly BootStrap 4 was used */
+/* custom variables Primary and secondary colour was made so it could be flexibly changed */
+:root
+{
+    --primary-color : #A993FF;
+    --secondary-color : #791B99; 
+}
+.navbar
+{
+    background-color: var(--primary-color);
+    
+}
+.navbar .navbar-brand
+{
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+.my-row
+{
+    padding-top: 20vh;
+    padding-bottom: 20vh;
+}
+.community{
+    padding-left: 4vh;
+}
+img
+{
+  border-radius: 5%;
+  box-shadow: gray 0 0 20px;
+  border: 1px solid white;
+}
+.my-footer
+{
+    background-color: var(--primary-color);
+}
+.my-footer h5
+{
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+.my-footer p
+{
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+.my-row-user
+{
+    padding-top: 10vh;
+    padding-bottom: 15vh;
+}
+#output ul 
+{
+        list-style-type: none;
+        font-weight: bold;
+        font-size: 1.2em;
+}
+.top
+{
+    padding-top: 8vh;
+}
+#users_list li 
+{
+    list-style-type: none;
+    font-weight: bold;
+}
+#users_list h5 
+{
+    color: green;
+    font-weight: 400;
+}
+
+ .results {
+     color: green;
+    font-weight: bold;
+ }
+
+ #books_list li 
+{
+    list-style-type: none;
+    font-weight: bold;
+}
+#books_list h5 
+{
+    color: green;
+    font-weight: 400;
+}
+
+#authors_list li 
+{
+    list-style-type: none;
+    font-weight: bold;
+}
+#authors_list h5 
+{
+    color: green;
+    font-weight: 400;
+}
+
+#loans_list li 
+{
+    list-style-type: none;
+    font-weight: bold;
+}
+#loans_list h5 
+{
+    color: green;
+    font-weight: 400;
+}

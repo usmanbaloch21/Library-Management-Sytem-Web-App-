@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body>
+    <header> <!-- Nav Bar -->
+        <nav class="navbar navbar-expand-sm navbar-light">
+            <a href="index.html" class="navbar-brand">University Of Pontybridge Library</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="users.html" class="nav-link">Users</a></li>
+                    <li class="nav-item"><a href="books.html" class="nav-link">Books</a></li>
+                    <li class="nav-item"><a href="loan_book.html" class="nav-link">Loans</a></li>
+                    <li class="nav-item"><a href="Book_review.html" class="nav-link">Community</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+        <section>
+        <div class="text-center top">
+            <h2>Search a Book By Title</h2>
+        </div>
+        </section> <!-- Side NavBar -->
+        <section class="my-row-user">
+            <div class="container-fluid text-center my-row-user">    
+                <div class="row content">
+                    <div class="col-sm-4 sidenav">
+                        <h3><a href="book_auth.html">Search By Book Author</a></h3>
+                        <h3><a href="add_book.html">Add a Book to Database</a></h3>
+                        <h3><a href="delete_book.html">Delete a Book from Database</a></h3>
+                    </div>
+                <div id="input">
+                    <form> <!-- Form For input-->
+                        <label> Enter Book Title : </label>
+                        <label for="search_word"> <input type="text" id="search_word" class="form-control" placeholder="Search Book" /> </label>
+                        <div>
+                        <input type="button" id="search_btn" class="btn btn-success" value="Search" /> 
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            <div class="text-center" id="output"></div>
+        </section>
+    <footer>
+        <div class="jumbotron text-center my-footer" style="margin-bottom:0">
+            <h5>University of Pontybridge</h5>
+            <p>Library Services</p>
+            <p>For IT sevices contact email= itsevices@pontybridge.edu</p>  
+        </div>          
+    </footer>
+    <script>
+        // defining Constants
+const url_searchuser = "http://127.0.0.1:3000/search?type=book";
+const searchterm = document.querySelector("#search_word");
+        // function for creating an http REQ
+const createRequest = function(url_searchuser) {
+    const httpRequest = new XMLHttpRequest(url_searchuser);
+    httpRequest.addEventListener('readystatechange', (url_searchuser) => {
+        if(httpRequest.readyState === 4) {
+        console.log(httpRequest.responseText)
+    }
+    });
+    httpRequest.addEventListener("load", responsejson);
+    httpRequest.open('GET', url_searchuser);
+    httpRequest.send();
+};
+
+        //Event listner for click on the Button 
+let submitbtn = document.getElementById("search_btn");
+submitbtn.addEventListener("click", function() {
+    let search_word = document.getElementById("search_word").value
+    if(search_word) {
+    let requesturl = url_searchuser + "&" + "title" + "=" + search_word;
+    createRequest(requesturl)
+    }
+}
+);
+        //Function to create an unordered list in output
+const createList = function(parentElement) {
+    let newList = document.createElement("ul");
+    parentElement.appendChild(newList);
+    return newList;
+};
+        // Function to add list items to the unordered List 
+const addListItem = function(parentList, textContent) {
+    let newItem = document.createElement("li");
+    newItem.appendChild(document.createTextNode(textContent));
+    parentList.appendChild(newItem);
+};
+        // Function to Parse the data in JSOn format and Populate the list 
+const responsejson = function(data) {
+    const response = JSON.parse(this.response);
+    console.log(response);
+    let outputDiv = document.getElementById("output");
+    let newList = createList(outputDiv);
+    response.forEach(function(name) {
+        addListItem(newList, " Book "+ response[0].title + " Has Been Found" + "!!!" );
+        addListItem(newList, " Title "+ " : " + response[0].title);
+        addListItem(newList, " ISBN "+ " : " + response[0].isbn);
+        addListItem(newList, " ID "+ " : " + response[0].id)
+        addListItem(newList, " Updated On "+ " : "+ response[0].updatedAt);
+        
+    });
+} 
+    </script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js"> </script>  
+</body>
+</html>

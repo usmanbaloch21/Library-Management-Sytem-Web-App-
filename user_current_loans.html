@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light">
+            <a href="index.html" class="navbar-brand">University Of Pontybridge Library</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="users.html" class="nav-link">Users</a></li>
+                    <li class="nav-item"><a href="books.html" class="nav-link">Books</a></li>
+                    <li class="nav-item"><a href="loan_book.html" class="nav-link">Loans</a></li>
+                    <li class="nav-item"><a href="Book_review.html" class="nav-link">Community</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+        <section>
+        <div class="text-center top">
+            <h2>Search a User's Current Loans By User ID</h2>
+        </div>
+        </section>
+        <section class="my-row-user">
+            <div class="container-fluid text-center my-row-user">    
+                <div class="row content">
+                    <div class="col-sm-4 sidenav">
+                        <h3><a href="loan_book.html">Loan Book/Update a Loan</a></h3>
+                        <h3><a href="user_loan_search.html">Search The User Currently Borrowing a Book</a></h3>
+                    </div>
+                <div id="input">
+                    <form>
+                        <label>Enter User ID: </label>
+                        <label for="search_word"> <input type="text" id="search_word" class="form-control" placeholder="Enter Valid User ID" /> </label>
+                        <div>
+                        <input type="button" id="search_btn" class="btn btn-success" value="Search" /> 
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            <div class="text-center results" id="output"></div>
+            <div>
+                <h5 class="text-center">List of Users in Database</h5>
+                <ul class="text-center" id="users_list">
+                    
+                </ul>
+            </div>
+        </section>
+    <footer>
+        <div class="jumbotron text-center my-footer" style="margin-bottom:0">
+            <h5>University of Pontybridge</h5>
+            <p>Library Services</p>
+            <p>For IT sevices contact email= itsevices@pontybridge.edu</p>  
+        </div>          
+    </footer>
+    <script>
+        // the URI for our local node Library Server
+const base_url = "http://127.0.0.1:3000";
+
+// a function that gets the list of Users and adds them to the list
+function Addnewuser() {
+
+    // setting up an http GET request to the user endpoint 
+    var xhttp = new XMLHttpRequest();
+    var users_url = "/users";
+
+    var query_url = base_url + users_url;
+    xhttp.open('GET', query_url);
+
+    // when the request is finished, go through the return data
+    // and add each user to the list
+    xhttp.addEventListener('load', function(){
+
+        var user_list= document.querySelector('#users_list');
+        // clear the list of existing data
+        user_list.innerHTML = "";
+
+        var users = JSON.parse(this.response);
+        // loop through all users
+        users.forEach(function(user){
+            // create a new list item for each one and add to the list
+            var name = document.createTextNode("Name: "+ user.name);
+            var id = document.createTextNode("ID: "+ user.id); 
+            var list_item1 = document.createElement('li');
+            var list_item4 = document.createElement('li');
+            list_item4.appendChild(id);
+            list_item1.appendChild(name);
+            user_list.appendChild(list_item4);
+            user_list.appendChild(list_item1);
+            
+        })
+        console.log(users)
+    });
+    xhttp.send();
+}
+
+Addnewuser();
+
+        //constants defined
+const url_searchuser = "http://127.0.0.1:3000/";
+const searchterm = document.querySelector("#search_word");
+        //function for new http req 
+const createRequest = function(url_searchuser) {
+    const httpRequest = new XMLHttpRequest(url_searchuser);
+    httpRequest.addEventListener('readystatechange', (url_searchuser) => {
+        if(httpRequest.readyState === 4) {
+        console.log(httpRequest.responseText)
+    }
+    });
+    httpRequest.addEventListener("load", responsejson);
+    httpRequest.open('GET', url_searchuser);
+    httpRequest.send();
+};
+
+
+var alpha = /^[A-Za-z]+$/
+    //function to activate when button is clicked 
+    //if alphabet console logs Enter valid ID
+    // function to only select numbers as IDs 
+let submitbtn = document.getElementById("search_btn");
+submitbtn.addEventListener("click", function() {
+    let search_word = document.getElementById("search_word").value
+    if(!alpha.test(search_word) ){
+    let requesturl = url_searchuser + "users" + "/" + search_word + "/" + "loans";
+    createRequest(requesturl)
+    }
+    else { console.log("Enter Valid ID")
+}
+});
+    // function to create unordered list 
+const createList = function(parentElement) {
+    let newList = document.createElement("ul");
+    parentElement.appendChild(newList);
+    return newList;
+};
+    //function to add list items 
+const addListItem = function(parentList, textContent) {
+    let newItem = document.createElement("li");
+    newItem.appendChild(document.createTextNode(textContent));
+    parentList.appendChild(newItem);
+};
+
+    //function to populate the html with response and loop through response 
+const responsejson = function(data) {
+    const response = JSON.parse(this.response);
+    console.log(response);
+    let outputDiv = document.getElementById("output");
+    let newList = createList(outputDiv);
+    addListItem(newList, "Loans By Current User")
+        var i;
+        for (i = 0; i < response.length; i++) {
+        addListItem(newList, " User ID: " + response[i].UserId)
+        addListItem(newList, " Book ID: " + response[i].BookId);
+        addListItem(newList, " DueDate: " + response[i].dueDate)
+        addListItem(newList, " Loan ID: " + response[i].id);
+        addListItem(newList, " Created At: " + response[i].createdAt); 
+        addListItem(newList, " Updated At: " + response[i].updatedAt);
+           }
+}
+    </script>  
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js"> </script>
+</body>
+</html>

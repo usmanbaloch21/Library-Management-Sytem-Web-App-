@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body>
+    <header> <!-- Nav Bar -->
+        <nav class="navbar navbar-expand-sm navbar-light">
+            <a href="index.html" class="navbar-brand">University Of Pontybridge Library</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="users.html" class="nav-link">Users</a></li>
+                    <li class="nav-item"><a href="books.html" class="nav-link">Books</a></li>
+                    <li class="nav-item"><a href="loan_book.html" class="nav-link">Loans</a></li>
+                    <li class="nav-item"><a href="Book_review.html" class="nav-link">Community</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <div class="text-center top">
+            <h2>Add New User</h2>
+        </div>
+        </section> <!-- Side Nav Bar -->
+        <section class="my-row-user">
+            <div class="container-fluid text-center my-row-user">    
+                <div class="row content">
+                    <div class="col-sm-4 sidenav">
+                        <h3><a href="users.html">Search User</a></h3>
+                        <h3><a href="update_user.html">Update User</a></h3>
+                        <h3><a href="delete_user.html">Delete User</a></h3>
+                    </div>
+                <div id="input">
+                    <form> <!-- Form For Getting Input to be added -->
+                        <div>                      
+                        <label>First Name: </label>
+                        <label for="input_name"> <input type="text" id="input_name" class="form-control" placeholder="Enter First Name" /> </label>
+                        <label>Last Name: </label>
+                        <label for="input2_name"> <input type="text" id="input2_name" class="form-control" placeholder="Enter Last Name" /> </label> 
+                        </div> 
+                        <div>                      
+                        <label>Barcode: </label>
+                        <label for="input_barcode"> <input type="text" id="input_barcode" class="form-control" placeholder="Enter Barcode" /> </label>                       
+                        <label>Member-Type: </label>
+                        <label for="input_member"> <input type="text" id="input_member" class="form-control" placeholder="Staff/Student" /> </label>
+                        </div> 
+                        <div>
+                        <input type="button" id="add_btn" class="btn btn-primary" value="Add User" /> 
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            <div>
+                <div class="text-center" id="users_list">
+
+                </div>
+            </div>
+        </section>
+    <footer>
+        <div class="jumbotron text-center my-footer" style="margin-bottom:0">
+            <h5>University of Pontybridge</h5>
+            <p>Library Services</p>
+            <p>For IT sevices contact email= itsevices@pontybridge.edu</p>  
+        </div>          
+    </footer>
+    <script>
+        // the URI for our local node Library Server
+const base_url = "http://127.0.0.1:3000";
+
+// a function that gets the list of Users and adds them to the list
+function Addnewuser() {
+
+    // setting up an http GET request to the user endpoint 
+    var xhttp = new XMLHttpRequest();
+    var users_url = "/users";
+
+    var query_url = base_url + users_url;
+    xhttp.open('GET', query_url);
+
+    // when the request is finished, go through the return data
+    // and add each user to the list
+    xhttp.addEventListener('load', function(){
+
+        var user_list= document.querySelector('#users_list');
+        // clear the list of existing data
+        user_list.innerHTML = "";
+
+        var users = JSON.parse(this.response);
+        // loop through all users
+        users.forEach(function(user){
+            // create a new list item for each one and add to the list
+            var message = document.createTextNode(user.name + " has been added to the Database Successfully.")
+            var name = document.createTextNode("Name: "+ user.name);
+            var barcode = document.createTextNode("Barcode: " +user.barcode);
+            var memtype = document.createTextNode("Member-Type: " + user.memberType);
+            var id = document.createTextNode("ID: "+ user.id);
+            var list_item0 = document.createElement('h5'); 
+            var list_item1 = document.createElement('li');
+            var list_item2 = document.createElement('li');
+            var list_item3 = document.createElement('li');
+            var list_item4 = document.createElement('li');
+            list_item0.appendChild(message);
+            list_item4.appendChild(id);
+            list_item1.appendChild(name);
+            list_item2.appendChild(barcode);
+            list_item3.appendChild(memtype);
+            user_list.appendChild(list_item0);
+            user_list.appendChild(list_item4);
+            user_list.appendChild(list_item1);
+            user_list.appendChild(list_item2);
+            user_list.appendChild(list_item3);
+            
+        })
+        console.log(users)
+    });
+    xhttp.send();
+}
+
+
+// when the user clicks the button, make a POST request to Add user 
+document.querySelector('#add_btn').addEventListener('click', function(){
+     
+    var adduser = base_url + "/" + "users"
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.open("POST", adduser);
+    // appropriate content type header for json 
+    xhttp.setRequestHeader('Content-Type', 'application/json')
+    //local constants created with the user in`post from forms 
+    const name = document.querySelector("#input_name").value + " " + document.querySelector("#input2_name").value;;
+    const barcode = document.querySelector("#input_barcode").value;
+    const membertype = document.querySelector("#input_member").value;
+
+    var params = {
+        name: name,
+        barcode: barcode,
+        memberType: membertype
+    };
+
+    // when the POST request is finished, clear and update the user list
+    xhttp.addEventListener('load', function(){
+        Addnewuser();
+    });
+    
+    xhttp.send(JSON.stringify(params));
+
+});
+
+Addnewuser();
+    </script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js"> </script>  
+</body>
+</html>

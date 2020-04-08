@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style/main.css">
+</head>
+<body>
+    <header> <!-- Nav bar -->
+        <nav class="navbar navbar-expand-sm navbar-light">
+            <a href="index.html" class="navbar-brand">University Of Pontybridge Library</a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navmenu">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="users.html" class="nav-link">Users</a></li>
+                    <li class="nav-item"><a href="books.html" class="nav-link">Books</a></li>
+                    <li class="nav-item"><a href="loan_book.html" class="nav-link">Loans</a></li>
+                    <li class="nav-item"><a href="Book_review.html" class="nav-link">Community</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+        <section>
+        <div class="text-center top">
+            <h2>Search the User Currently Borrowing a Book</h2>
+        </div>
+        </section>
+        <section class="my-row-user"> <!-- Side Nav bar  -->
+            <div class="container-fluid text-center my-row-user">    
+                <div class="row content">
+                    <div class="col-sm-4 sidenav">
+                        <h3><a href="loan_book.html">Loan Book/Update a Loan</a></h3>
+                        <h3><a href="user_current_loans.html">Search a User's Current Loans</a></h3>
+                    </div>
+                <div id="input">
+                    <form> <!-- Input for forms -->
+                        <label>Enter Book ID: </label>
+                        <label for="search_word"> <input type="text" id="search_word" class="form-control" placeholder="Enter Valid Book ID" /> </label>
+                        <div>
+                        <input type="button" id="search_btn" class="btn btn-success" value="Search" /> 
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+            <div class="text-center results" id="output"></div>
+        </section>
+    <footer>
+        <div class="jumbotron text-center my-footer" style="margin-bottom:0">
+            <h5>University of Pontybridge</h5>
+            <p>Library Services</p>
+            <p>For IT sevices contact email= itsevices@pontybridge.edu</p>  
+        </div>          
+    </footer>
+    <script>
+    //defining constants to make request to the loans end Point 
+const url_searchuser = "http://127.0.0.1:3000/loans/books/";
+const searchterm = document.querySelector("#search_word");
+    // creating a function to do http request 
+const createRequest = function(url_searchuser) {
+    const httpRequest = new XMLHttpRequest(url_searchuser);
+    httpRequest.addEventListener('readystatechange', (url_searchuser) => {
+        if(httpRequest.readyState === 4) {
+        console.log(httpRequest.responseText)
+    }
+    });
+    httpRequest.addEventListener("load", responsejson);
+    httpRequest.open('GET', url_searchuser);
+    httpRequest.send();
+};
+
+    //creating a function to send data when the search button is clicked 
+let submitbtn = document.getElementById("search_btn");
+submitbtn.addEventListener("click", function() {
+    let search_word = document.getElementById("search_word").value
+    if(search_word) {
+    let requesturl = url_searchuser + search_word;
+    createRequest(requesturl)
+    }
+}
+);
+    // a function to create an unordered list
+const createList = function(parentElement) {
+    let newList = document.createElement("ul");
+    parentElement.appendChild(newList);
+    return newList;
+};
+    //a function to create a list item
+const addListItem = function(parentList, textContent) {
+    let newItem = document.createElement("li");
+    newItem.appendChild(document.createTextNode(textContent));
+    parentList.appendChild(newItem);
+};
+
+    // function to populate the output and show the data 
+const responsejson = function(data) {
+    const response = JSON.parse(this.response);
+    console.log(response);
+    let outputDiv = document.getElementById("output");
+    let newList = createList(outputDiv);
+    response.forEach(function(name) {
+        addListItem(newList, " User with User ID: "+ response[0].UserId + " is currently borrowing this book");
+        addListItem(newList, " DueDate "+ " : " + response[0].dueDate);
+        
+    });
+}
+    </script>  
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js"> </script>
+</body>
+</html>
